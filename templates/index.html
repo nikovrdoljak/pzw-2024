@@ -8,4 +8,17 @@
 
 {% block body %}
 <h1>Dobrodošli u moju Flask aplikaciju!</h1>
+{% if name %}
+	<h2>Hello, {{ name }}!</h2>
+{% else %}
+	<h2>Hello, Stranger!</h2>
+{% endif %}
+
+<form method="post">
+    <div class="mb-3">
+        {{ form.name.label(class="form-label") }}
+        {{ form.name(class="form-control") }}
+    </div>
+    {{ form.submit(class="btn btn-primary") }}
+</form>
 {% endblock %}
