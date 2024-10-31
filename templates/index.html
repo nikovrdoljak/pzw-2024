@@ -14,11 +14,7 @@
 	<h2>Hello, Stranger!</h2>
 {% endif %}
 
-<form method="post">
-    <div class="mb-3">
-        {{ form.name.label(class="form-label") }}
-        {{ form.name(class="form-control") }}
-    </div>
-    {{ form.submit(class="btn btn-primary") }}
-</form>
+{% from 'bootstrap5/form.html' import render_form %}
+{{ render_form(form) }}
+
 {% endblock %}
