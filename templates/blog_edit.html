@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Uređivanje Blog članka{% endblock %}
+
+{% block head %}
+{{ super() }}
+<!-- Uključi EasyMDE CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+<!-- Uključi Choices.js CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+
+{% endblock %}
+
+{% block body %}
+{% from 'bootstrap5/form.html' import render_form %}
+{{ render_form(form) }}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<!-- Uključi EasyMDE JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+<script>
+// Inicijalizacija EasyMDE editora
+var easyMDE = new EasyMDE({ element: document.getElementById('markdown-editor') });
+</script>
+
+<!-- Uključi i inicijaliziraj Choices.js JS -->
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script>
+    const tagsInput = document.getElementById('tags');
+    const choices = new Choices(tagsInput, {
+        delimiter: ',',
+        editItems: true,
+        maxItemCount: 5,
+        removeItemButton: true,
+        duplicateItemsAllowed: false
+    });
+</script>
+{% endblock %}
