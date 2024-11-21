@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Vaš profil{% endblock %}
+{% block head %}
+	{{ super() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+{% endblock %}
+
+{% block body %}
+{% from 'bootstrap5/form.html' import render_form %}
+<h2>Ažurirajte svoj profil</h2>
+<div class="row">
+    <div class="col-6">{{ render_form(form) }}</div>
+    <div class="col-6">
+        {% if image_id %}
+        <img src="{{ url_for('serve_image', image_id=image_id) }}" class="img-thumbnail" style="max-width: 250px;" alt="User photo">
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+	{{ super() }}
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+    <script>
+        var easyMDE = new EasyMDE({ element: document.getElementById('markdown-editor') });
+    </script>
+{% endblock %}

@@ -10,34 +10,102 @@
             {{ bootstrap.load_css() }}
         {% endblock %}    
     {% endblock %}
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
     
     <div class="container mt-5">
         {% from 'bootstrap5/nav.html' import render_nav_item %}
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top mb-5">
-            <a class="navbar-brand ms-2" href="{{url_for('index') }}">Flask-Blog</a>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5 sticky-top">
+            <a class="navbar-brand" href="{{url_for('index') }}">Flask-Blog</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-    
-            <div class="collapse navbar-collapse mt-1" id="navbarNav">
+
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    {{ render_nav_item('post_create', 'Novi članak', _use_li = True) }}
+                    {% if current_user.is_authenticated %}
+                    {{ render_nav_item('post_create', 'Novi post', _use_li = True) }}
+                    {{ render_nav_item('my_posts', 'Moji postovi', _use_li = True) }}
+                    {%endif%}
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            {{current_user.get_id()}}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item icon-link" href="{{url_for('profile') }}"><i class="bi bi-person mb-2"></i>Profil</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item icon-link" href="{{url_for('logout') }}"><i class="bi bi-box-arrow-right mb-2"></i>Odjava</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    {{ render_nav_item('login', 'Prijava', _use_li = True) }}
+                    {{ render_nav_item('login', 'Registracija', _use_li = True) }}
+                    {% endif %}
+                    </li>
                 </ul>
             </div>
-        </nav>        
+        </nav>      
 
         {% from 'bootstrap5/utils.html' import render_messages %}
         {{ render_messages(container=False, dismissible=True) }}
         
         {% block body %}
         {% endblock %}
+
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <p class="col-md-6 mb-0 text-body-secondary">© 2024 Flask-Blog</p>
+            <ul class="nav col-md-6 justify-content-end">
+                <li class="nav-item"><a href="" class="nav-link px-2 text-body-secondary">Početna</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Dokumentacija</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">O nama</a></li>
+            </ul>
+        </footer>
     </div>
     {% block scripts %}
     {{ bootstrap.load_js() }}
     {% endblock %}
+
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Potvrda brisanja</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Da li ste sigurni da želite obrisati ovaj post?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                    <form id="deleteForm" method="POST" action="" class="d-inline">
+                        <button type="submit" class="btn btn-danger">Briši</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            const button = event.relatedTarget;
+            // Extract post ID from data-* attributes
+            const postId = button.getAttribute('data-postid');
+            // Update the form action to include the correct post ID
+            const deleteForm = document.getElementById('deleteForm');
+            deleteForm.action = `/blog/delete/${postId}`;
+        });
+    </script>
 </body>
 </html>
