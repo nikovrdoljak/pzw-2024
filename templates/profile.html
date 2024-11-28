@@ -8,7 +8,8 @@
 
 {% block body %}
 {% from 'bootstrap5/form.html' import render_form %}
-<h2>Ažurirajte svoj profil</h2>
+<h2>{{ title }}</h2>
+
 <div class="row">
     <div class="col-6">{{ render_form(form) }}</div>
     <div class="col-6">

@@ -17,6 +17,7 @@
             <span class="badge bg-primary">{{ tag }}</span>
         {% endfor %}</p>
         <p class="mt-5">{{ post.content | markdown | safe }}</p>
+        {% if edit_post_permission(post['_id']).can() %}
         <div>
             <a href="{{ url_for('post_edit', post_id=post['_id']) }}" type="button" class="btn btn-primary btn-sm">Uredi</a>
             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
@@ -24,6 +25,7 @@
                 Briši
             </button>
         </div>
+        {% endif %}
     </div>
 
 {% endblock %}
